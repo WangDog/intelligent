@@ -25,8 +25,9 @@
     }
     &.question-1 {
         background-image: url(../../assets/img/question_1.png);
-        width: px2remN(444);
-        height: px2remN(190);
+        width: px2remN(480);
+        height: px2remN(205);
+        //background-size: 100% 100%;
         h2 {
             max-width: px2remN(400);
         }
@@ -35,7 +36,8 @@
     &.question-2 {
         background-image: url(../../assets/img/question_2.png);
         width: px2remN(480);
-        height: px2remN(190);
+        height: px2remN(205);
+        background-size: 100% 100%;
         h2 {
             max-width: px2remN(480);
         }
@@ -86,8 +88,10 @@
             <h2>
                 <span v-text="content"></span>
                 <!-- </br> -->
-                <span v-if="limit === 1" class="limit">请选择<strong class="limit-count">1</strong>个选项答案</span>
-                <span v-else class="limit">请选择<strong class="limit-count">1-{{limit}}</strong>个选项答案</span>
+                <div v-if="showLimit">
+                    <span v-if="limit === 1" class="limit">请选择<strong class="limit-count">1</strong>个选项答案</span>
+                    <span v-else class="limit">请选择<strong class="limit-count">1-{{limit}}</strong>个选项答案</span>
+                </div>
             </h2>
         </div>
     </transition>
@@ -112,7 +116,8 @@ export default {
     data() {
         return {
             content: '',
-            show: true
+            show: true,
+            showLimit: false
         };
     },
     mounted() {
@@ -126,15 +131,15 @@ export default {
             let t = setInterval(function () { write() }, 150);
             let i = 1;
             let len = msg.length;
-            this.questionAll = false;
+            this.showLimit = false;
             function write() {
                 var msg1 = self.msg.substring(0, i);
                 self.content = msg1;
                 if (i == len) {
                     clearInterval(t);
                     setTimeout(() => {
-                        self.questionAll = true;
-                    }, 200);
+                        self.showLimit = true;
+                    }, 500);
                 }
                 else
                     i++;
@@ -144,6 +149,7 @@ export default {
     watch: {
         msg: function () {
             this.show = false;
+            this.showLimit = false;
             this.content = '';
             setTimeout(() => {
                 this.show = true;

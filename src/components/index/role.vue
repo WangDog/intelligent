@@ -413,42 +413,12 @@ export default {
     methods: {
         selectRole(role, index, event) {
             let classList = event.target.classList;
-            if (classList.contains('female')) {
-                this.maleNode.classList.remove('male-selected');
-            }
-            if (classList.contains('male')) {
-                this.femaleNode.classList.remove('female-selected');
-            }
             setTimeout(() => {
                 classList.toggle(role);
                 classList.toggle('ani');
             }, 100);
             this.questionAndAnswerRole.answerList[index].selected = !(this.questionAndAnswerRole.answerList[index].selected);
         },
-        // femaleTouchStart() {
-        //     this.femaleNode.classList.add('big');
-        //     this.femaleNode.classList.remove('small-female', 'select');
-        //     this.maleNode.classList.add('small-male');
-        //     this.maleNode.classList.remove('select', 'male-selected');
-        //     this.sex = "husband";
-        // },
-        // femaleTouchEnd() {
-        //     this.maleNode.classList.remove('big');
-        //     this.femaleNode.classList.remove('big');
-        //     this.femaleNode.classList.add('select');
-        // },
-        // maleTouchStart() {
-        //     this.maleNode.classList.add('big');
-        //     this.maleNode.classList.remove('select', 'small-male');
-        //     this.femaleNode.classList.add('small-female');
-        //     this.femaleNode.classList.remove('select', 'female-selected');
-        //     this.sex = "wife";
-        // },
-        // maleTouchEnd() {
-        //     this.femaleNode.classList.remove('big');
-        //     this.maleNode.classList.remove('big');
-        //     this.maleNode.classList.add('select');
-        // }
     },
     watch: {
         answerList: function() {

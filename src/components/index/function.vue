@@ -90,7 +90,7 @@ input[type='checkbox'] {
         //background-position: 0 -60px;
         z-index: 10; //animation: none;
         svg {
-            //opacity: 1;
+            opacity: 1;
         }
     }
 }
@@ -181,7 +181,8 @@ ul {
     animation-timing-function: linear;
     animation-timing-function: cubic-bezier(0.215, .61, .355, 1);
     animation-fill-mode: forwards;
-    animation-delay: 0s; //box-shadow: -5px 5px 5px #20b9f1, -5px 5px 5px #20b9f1, 5px -5px 5px #20b9f1, -5px -5px 5px #20b9f1;
+    animation-delay: 0s; 
+    box-shadow: 5px 5px 5px #20b9f1, -5px 5px 5px #20b9f1, 5px -5px 5px #20b9f1, -5px -5px 5px #20b9f1;
     border-radius: 50%;
     transform: box-shadow 1s cubic-bezier(0.165, 0.84, 0.44, 1) 1.5s;
 }
@@ -209,8 +210,8 @@ ul {
 </style>
 <template>
     <ul class="clearfix">
-        <li v-for="(answer, index) in questionAndAnswerFunc.answerList" v-bind:key="index">
-            <input type="checkbox" :id="'bubble_' + index" @click="selectFunc(index)" />
+        <li v-for="(answer, index) in questionAndAnswerFunc.answerList" v-bind:key="index" @click="selectFunc(index)" >
+            <input type="checkbox" :id="'bubble_' + index" />
             <label :for="'bubble_' + index" :class="'bubble_' + index">
                 <span>{{answer.text}}</span>
             </label>
@@ -220,10 +221,18 @@ ul {
 <script>
 export default {
     name: 'func',
+    created: function() {
+        this.questionAndAnswerFunc.selectList = [];
+        this.answerNodeList = document.getElementsByTagName('li');
+
+    },
     props: {
         questionAndAnswerFunc: {
             type: Object,
             required: true
+        },
+        limit: {
+
         }
     },
     data() {
@@ -233,10 +242,19 @@ export default {
     },
     methods: {
         selectFunc(index) {
-            let label = event.target.nextElementSibling;
+            let liNode = event.currentTarget;
+            // let label = event.currentTarget.children[1];
             //点击添加动画效果
-            label.classList.toggle('selected');
-            label.style.animation = 'none';
+            console.log(index);
+            if(this.questionAndAnswerFunc.selectList.length >=  this.limit) {
+                let answer = this.questionAndAnswerFunc.selectList.shift();
+                let i = answer.index - 1;
+                console.log(this.answerNodeList[i]);
+                this.answerNodeList[i].classList.remove('selected');
+            }
+            this.questionAndAnswerFunc.selectList.push(this.questionAndAnswerFunc.answerList[index]);
+            liNode.classList.toggle('selected');
+            //label.style.animation = 'none';
             //去除背景
             //label.style.backgroundImage = 'none';
         }
