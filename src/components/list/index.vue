@@ -91,6 +91,7 @@
                 background-color: #fff;
                 margin-right: px2remN(34);
                 margin-bottom: px2remN(20);
+                text-decoration: none;
 
                 &:nth-child(2n) {
                     margin-right: 0;
@@ -104,6 +105,10 @@
                         height: 100%;
                         border: 0;
                         background-color: white;
+                        min-width: 161.3px;
+                        min-height: 161.3px;
+                        opacity: 0;
+                        transition: opacity .5s ease-in;
                     }
 
                     .tip {
@@ -277,260 +282,34 @@
                 <span>以下是为您量身推荐的手机：</span>
             </div>
             <div class="index-main clearfix">
-                <a class="good-list" href="https://item.m.jd.com/product/278118.html">
+                <a v-for="(recomSku, index) in recomSkuList" :key="index" class="good-list" :href="'https://item.m.jd.com/product/' + recomSku.skuId + '.html'">
                     <div class="good-img">
-                        <img src="../../assets/img/1.png" alt="">
-                        <div class="tip hot">
+                        <img v-if="index < 4" style="opacity: 1;" :src="'https://img14.360buyimg.com/n3/' + recomSku.imagePath" alt="图片找不到了">
+                        <img v-if="index >= 4" :data-src="'https://img14.360buyimg.com/n3/' + recomSku.imagePath" alt="图片找不到了">
+                        <div class="tip" :class="recomSku.adTag | adTagFilter" v-if="recomSku.adTag">
                             <div class="tip-info">
-                                <span>爆品</span>
+                                <span>{{recomSku.adTag}}</span>
                             </div>
                         </div>
                     </div>
                     <div class="good-info">
                         <div class="good-title">
-                            惠普（HP）暗影精灵III代 15.6英寸游戏笔记本（i7-7700HQ 8G 128GSSD 1T GTX1050Ti 4G独
+                            {{recomSku.name}}
                         </div>
                         <div class="good-evaluate">
-                            <span class="comment-number">878条评价</span>
-                            <span class="comment-rate">95% 好评</span>
+                            <span class="comment-number">{{recomSku.skuCommentSummary.commentCount}}条评价</span>
+                            <span class="comment-rate">{{recomSku.skuCommentSummary.goodRateShow}}%好评</span>
                         </div>
                         <div class="price-wrap">
                             <div class="now-price">
-                                <span>¥</span>7999.00</div>
+                                <span>¥</span>{{recomSku.price}}.00</div>
                             <div class="sale-icon">
                                 <div class="icon coupon"></div>
                                 <div class="icon dou"></div>
-                                <!-- <div class="icon off"></div> -->
+                                 <!-- <div class="icon off"></div>  -->
                                 <div class="icon gift"></div>
                             </div>
                         </div>
-                        <!-- <div class="buy-car">
-                                                            <span class="icon-wrap"></span>
-                                                        </div> -->
-                    </div>
-                </a>
-                <a class="good-list">
-                    <div class="good-img">
-                        <img src="../../assets/img/1.png" alt="">
-                        <div class="tip new">
-                            <div class="tip-info">
-                                <span>新品</span>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="good-info">
-                        <div class="good-title">
-                            惠普（HP）暗影精灵III代 15.6英寸游戏笔记本（i7-7700HQ 8G 128GSSD 1T GTX1050Ti 4G独
-                        </div>
-                        <div class="good-evaluate">
-                            <span class="comment-number">878条评价</span>
-                            <span class="comment-rate">95% 好评</span>
-                        </div>
-                        <div class="price-wrap">
-                            <div class="now-price">
-                                <span>¥</span>7999.00</div>
-                            <div class="sale-icon">
-                                <div class="icon coupon"></div>
-                                <div class="icon dou"></div>
-                                <!-- <div class="icon off"></div> -->
-                                <div class="icon gift"></div>
-                            </div>
-                        </div>
-                        <!-- <div class="buy-car">
-                                                            <span class="icon-wrap"></span>
-                                                        </div> -->
-                    </div>
-                </a>
-                <a class="good-list">
-                    <div class="good-img">
-                        <img src="../../assets/img/1.png" alt="">
-                        <div class="tip first">
-                            <div class="tip-info">
-                                <span>首发</span>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="good-info">
-                        <div class="good-title">
-                            惠普（HP）暗影精灵III代 15.6英寸游戏笔记本（i7-7700HQ 8G 128GSSD 1T GTX1050Ti 4G独
-                        </div>
-                        <div class="good-evaluate">
-                            <span class="comment-number">878条评价</span>
-                            <span class="comment-rate">95% 好评</span>
-                        </div>
-                        <div class="price-wrap">
-                            <div class="now-price">
-                                <span>¥</span>7999.00</div>
-                            <div class="sale-icon">
-                                <div class="icon coupon"></div>
-                                <div class="icon dou"></div>
-                                <!-- <div class="icon off"></div> -->
-                                <div class="icon gift"></div>
-                            </div>
-                        </div>
-                        <!-- <div class="buy-car">
-                                                            <span class="icon-wrap"></span>
-                                                        </div> -->
-                    </div>
-                </a>
-                <a class="good-list">
-                    <div class="good-img">
-                        <img src="../../assets/img/1.png" alt="">
-                        <div class="tip hot">
-                            <div class="tip-info">
-                                <span>爆品</span>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="good-info">
-                        <div class="good-title">
-                            惠普（HP）暗影精灵III代 15.6英寸游戏笔记本（i7-7700HQ 8G 128GSSD 1T GTX1050Ti 4G独
-                        </div>
-                        <div class="good-evaluate">
-                            <span class="comment-number">878条评价</span>
-                            <span class="comment-rate">95% 好评</span>
-                        </div>
-                        <div class="price-wrap">
-                            <div class="now-price">
-                                <span>¥</span>7999.00</div>
-                            <div class="sale-icon">
-                                <div class="icon coupon"></div>
-                                <div class="icon dou"></div>
-                                <!-- <div class="icon off"></div> -->
-                                <div class="icon gift"></div>
-                            </div>
-                        </div>
-                        <!-- <div class="buy-car">
-                                                            <span class="icon-wrap"></span>
-                                                        </div> -->
-                    </div>
-                </a>
-                <a class="good-list">
-                    <div class="good-img">
-                        <img src="../../assets/img/1.png" alt="">
-                        <div class="tip hot">
-                            <div class="tip-info">
-                                <span>爆品</span>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="good-info">
-                        <div class="good-title">
-                            惠普（HP）暗影精灵III代 15.6英寸游戏笔记本（i7-7700HQ 8G 128GSSD 1T GTX1050Ti 4G独
-                        </div>
-                        <div class="good-evaluate">
-                            <span class="comment-number">878条评价</span>
-                            <span class="comment-rate">95% 好评</span>
-                        </div>
-                        <div class="price-wrap">
-                            <div class="now-price">
-                                <span>¥</span>7999.00</div>
-                            <div class="sale-icon">
-                                <div class="icon coupon"></div>
-                                <div class="icon dou"></div>
-                                <!-- <div class="icon off"></div> -->
-                                <div class="icon gift"></div>
-                            </div>
-                        </div>
-                        <!-- <div class="buy-car">
-                                                            <span class="icon-wrap"></span>
-                                                        </div> -->
-                    </div>
-                </a>
-                <a class="good-list">
-                    <div class="good-img">
-                        <img src="../../assets/img/1.png" alt="">
-                        <div class="tip hot">
-                            <div class="tip-info">
-                                <span>爆品</span>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="good-info">
-                        <div class="good-title">
-                            惠普（HP）暗影精灵III代 15.6英寸游戏笔记本（i7-7700HQ 8G 128GSSD 1T GTX1050Ti 4G独
-                        </div>
-                        <div class="good-evaluate">
-                            <span class="comment-number">878条评价</span>
-                            <span class="comment-rate">95% 好评</span>
-                        </div>
-                        <div class="price-wrap">
-                            <div class="now-price">
-                                <span>¥</span>7999.00</div>
-                            <div class="sale-icon">
-                                <div class="icon coupon"></div>
-                                <div class="icon dou"></div>
-                                <!-- <div class="icon off"></div> -->
-                                <div class="icon gift"></div>
-                            </div>
-                        </div>
-                        <!-- <div class="buy-car">
-                                                            <span class="icon-wrap"></span>
-                                                        </div> -->
-                    </div>
-                </a>
-                <a class="good-list">
-                    <div class="good-img">
-                        <img src="../../assets/img/1.png" alt="">
-                        <div class="tip hot">
-                            <div class="tip-info">
-                                <span>爆品</span>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="good-info">
-                        <div class="good-title">
-                            惠普（HP）暗影精灵III代 15.6英寸游戏笔记本（i7-7700HQ 8G 128GSSD 1T GTX1050Ti 4G独
-                        </div>
-                        <div class="good-evaluate">
-                            <span class="comment-number">878条评价</span>
-                            <span class="comment-rate">95% 好评</span>
-                        </div>
-                        <div class="price-wrap">
-                            <div class="now-price">
-                                <span>¥</span>7999.00</div>
-                            <div class="sale-icon">
-                                <div class="icon coupon"></div>
-                                <div class="icon dou"></div>
-                                <!-- <div class="icon off"></div> -->
-                                <div class="icon gift"></div>
-                            </div>
-                        </div>
-                        <!-- <div class="buy-car">
-                                                            <span class="icon-wrap"></span>
-                                                        </div> -->
-                    </div>
-                </a>
-                <a class="good-list">
-                    <div class="good-img">
-                        <img src="../../assets/img/1.png" alt="">
-                        <div class="tip hot">
-                            <div class="tip-info">
-                                <span>爆品</span>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="good-info">
-                        <div class="good-title">
-                            惠普（HP）暗影精灵III代 15.6英寸游戏笔记本（i7-7700HQ 8G 128GSSD 1T GTX1050Ti 4G独
-                        </div>
-                        <div class="good-evaluate">
-                            <span class="comment-number">878条评价</span>
-                            <span class="comment-rate">95% 好评</span>
-                        </div>
-                        <div class="price-wrap">
-                            <div class="now-price">
-                                <span>¥</span>7999.00</div>
-                            <div class="sale-icon">
-                                <div class="icon coupon"></div>
-                                <div class="icon dou"></div>
-                                <!-- <div class="icon off"></div> -->
-                                <div class="icon gift"></div>
-                            </div>
-                        </div>
-                        <!-- <div class="buy-car">
-                                                            <span class="icon-wrap"></span>
-                                                        </div> -->
                     </div>
                 </a>
             </div>
@@ -547,6 +326,7 @@
 </template>
 <script>
 import apis from '../../util/api';
+import md5 from 'blueimp-md5';
 import { arrTips, getCookie, setTitle, bodyOverflow, clickSend, toShare, goTop, debounce } from '../../util';
 export default {
     name: 'list',
@@ -556,9 +336,13 @@ export default {
                 image_url: '../../assets/img/banner.png',
                 url: ''
             }],
+            showLoading: true,
             goUpShow: false,
             currentPage: 1,
             pageInfo: false,
+            recomSkuList: null,
+            imgCount: 40,
+            imgCurrent: 4
         }
     },
     created() {
@@ -566,21 +350,42 @@ export default {
 
         this.searchList();
 
+        this.$loading.show();
+
         window.onscroll = null;
+
         let height = Math.min(document.body.clientHeight, document.documentElement.clientHeight);
+        let img = document.getElementsByTagName('img');
+
+        //触屏时显示页码信息
         document.addEventListener('touchstart', () => {
             this.pageInfo = true;
         });
+
         window.onscroll = debounce(() => {
 
             let scrollTop = document.body.scrollTop;
+            let clientHeight = document.body.clientHeight;
+            let screenHeight = window.screenHeight;
+
+            //图片懒加载
+            for (let i = this.imgCurrent; i < this.imgCount; i++) {
+                if (img[i].offsetParent.offsetTop < clientHeight + scrollTop) {
+                    img[i].src = img[i].getAttribute('data-src');
+                    img[i].style.opacity = 1;
+                    this.imgCurrent = i + 1;
+                    console.log('图片加载[' + i + ']:' + img[i].src);
+                }
+            }
+
+            //显示返回顶部按钮
             if (scrollTop > 450) {
                 this.goUpShow = true;
             } else {
                 this.goUpShow = false;
             }
 
-            this.currentPage = Math.floor(scrollTop / 550) + 1;
+            this.currentPage = Math.floor(scrollTop / 550) + 1
             //this.pageInfo = false;
         }, 30, true);
     },
@@ -593,26 +398,29 @@ export default {
             goTop();
         },
         searchList() {
-            let params = this.$route.query;
-            console.log(params);
-            params = {
-                "sign": "aeds32asd42323",
-                "data": {
-                    "pin": "adcUfNKLgAriMy",
-                    "catid": "655",
-                    "tagList": [
-                        {
-                            "tag_id": 11
-                        }
-                    ]
-                }
-            }
+            //let params = this.$route.query;\
+            const secretkey = '12345678';
             let opts = {
                 method: 'recomskulist',
-                timestamp: 'currentTimestamp',
-                appkey: 'tuniu'
+                appkey: '8a48b5514b0b8727014b2a490bfd1bee',
+                timestamp: Math.floor((new Date().getTime()) / 1000)
             }
-            this.recomskulist(opts, params);
+            let params = {
+                "data": {
+                    "area": "2,2825,51932,0.137923392",
+                    "pin": "adcUfNKLgAriMy",
+                    "tagList": [
+                        {
+                            "tag_id": 2
+                        }
+                    ],
+                    "catid": "655"
+                }
+            }
+            console.log('' + opts.timestamp + secretkey + JSON.stringify(params.data));
+            params.sign = md5('' + opts.timestamp + secretkey + JSON.stringify(params.data));
+            console.log(params.sign);
+            this.recomskulist(params, opts);
         },
         /**
          * 查询手机信息列表
@@ -625,24 +433,11 @@ export default {
                     this.isLoading = false;
                     this.errorMsg = '网络异常, 未获取到航班信息';
                     this.errorType = 4;
+                    this.$loading.close();
                     return;
                 }
-                if (data.data.code == 200) {
-                    let json = data.data;
-                    self.intervalQuerySuccess(json, opts);
-                } else if (data.data.code == 300) {
-                    this.errorMsg = arrTips[2];
-                    this.errorType = 2;
-                    this.isLoading = false;
-                } else if (data.data.code == 0) {
-                    this.errorMsg = arrTips[2];
-                    this.errorType = 2;
-                    this.isLoading = false;
-                } else {
-                    this.errorMsg = arrTips[2];
-                    this.errorType = 2;
-                    this.isLoading = false;
-                }
+                self.recomSkuList = data.data.recomSkuList;
+                this.$loading.close();
             }).catch(error => {
                 if (apis.isCancel(error)) {
                     console.log('请求已取消');
@@ -652,6 +447,7 @@ export default {
                     this.errorType = 4;
                     console.warn('=========================', error);
                 }
+                this.$loading.close();
             });
         },
     }

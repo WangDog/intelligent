@@ -102,19 +102,19 @@
 
 .price-init .price {
     &.price-1 {
-        animation-delay: 3s;
+        animation-delay: 1.25s;
     }
     &.price-2 {
-        animation-delay: 3.25s;
+        animation-delay: 1.5s;
     }
     &.price-3 {
-        animation-delay: 3.5s;
+        animation-delay: 1.75s;
     }
     &.price-4 {
-        animation-delay: 3.75s;
+        animation-delay: 2s;
     }
     &.price-5 {
-        animation-delay: 4s;
+        animation-delay: 2.25s;
     }
 }
 

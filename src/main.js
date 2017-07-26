@@ -10,6 +10,7 @@ import { storage } from './util';
 import { isLogin, checkIsAuth } from './util/login';
 import './assets/css/common.scss';
 import Promise from 'promise-polyfill';
+import * as filters from './filters';
 
 if (!window.Promise) {
   window.Promise = Promise;
@@ -18,7 +19,7 @@ if (!window.Promise) {
 Vue.component(Swipe.name, Swipe);
 Vue.component(SwipeItem.name, SwipeItem);
 
-//Object.keys(filters).forEach(k => Vue.filter(k, filters[k])) //注册过滤器
+Object.keys(filters).forEach(k => Vue.filter(k, filters[k])) //注册过滤器
 // 注册toast loading
 Vue.$toast = Vue.prototype.$toast = Toast;
 Vue.$loading = Vue.prototype.$loading = Loading;

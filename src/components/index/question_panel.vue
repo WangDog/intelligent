@@ -10,11 +10,18 @@
     h2 {
         position: absolute;
         top: px2remN(50);
-        left: px2remN(50);
+        left: px2remN(70);
         font-size: 16px;
         color: #fff;
-        line-height: px2remN(45);
+        line-height: px2remN(40);
         letter-spacing: px2remN(3); //white-space: nowrap;
+        .limit {
+            font-size: 12px;
+            .limit-count {
+                font-size: 13px;
+                font-style: oblique;
+            }
+        }
     }
     &.question-1 {
         background-image: url(../../assets/img/question_1.png);
@@ -78,8 +85,9 @@
         <div class="question" :class="'question-' + step" v-if="show">
             <h2>
                 <span v-text="content"></span>
-                </br>
-                <!-- <span class="">请选择2-4个选项答案</span> -->
+                <!-- </br> -->
+                <span v-if="limit === 1" class="limit">请选择<strong class="limit-count">1</strong>个选项答案</span>
+                <span v-else class="limit">请选择<strong class="limit-count">1-{{limit}}</strong>个选项答案</span>
             </h2>
         </div>
     </transition>
@@ -94,8 +102,11 @@ export default {
             required: true
         },
         msg: {
-            type: String,
-            required: true
+            // type: String,
+            // required: true
+        },
+        limit: {
+
         }
     },
     data() {
@@ -112,7 +123,7 @@ export default {
     methods: {
         showQuestion(msg) {
             let self = this;
-            let t = setInterval(function () { write() }, 100);
+            let t = setInterval(function () { write() }, 150);
             let i = 1;
             let len = msg.length;
             this.questionAll = false;

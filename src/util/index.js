@@ -331,6 +331,61 @@ var debounce = function (fn, delay, immediate) {
    return throttle(fn, delay, immediate, true);
 };
 
+/**
+ * 公用方法：业务逻辑，分享，
+ * @export 
+ * @param {any} instance  组件实例(home/list)
+ * @param {any} a  出发城市
+ * @param {any} b  到达城市
+ * @param {any} c  出发日期
+ * @param {any} d  到达日期
+ * @param {any} e  OW && RT 
+ * @param {any} f  1-单程；2-往返去程；3-往返回程
+ * @returns
+ */
+export function toShare(instance, a, b, c, d, e, f) {
+
+    var jdShare = require('./jsShare');
+    var url = 'https://airtickets.jd.com';
+    var content = '购机票，上京东！低价机票，品质出游！说走就走，放心购！';
+    if(instance == "list"){
+        if(f==3)
+        {
+            return;
+        }            
+        else
+        {
+            url = window.location.href;
+            url = url.replace(/fromtype=index/, "fromtype=ad");
+            if (window.price) {
+                content = '我正在预订'+ c.split("-")[1] +'月'+ c.split("-")[2] +'日，'+ a +'->'+ b +'的航班，航班最低价只要'+window.price+'元起，快来看看吧！';
+            } else {
+                content = '我正在预订'+ c.split("-")[1] +'月'+ c.split("-")[2] +'日，'+ a +'->'+ b +'的航班，快来看看吧！';
+            }
+        }           
+        
+    } 
+    else
+    {
+        url = 'https://airtickets.jd.com';
+        content = '购机票，上京东！低价机票，品质出游！说走就走，放心购！';
+    }
+        
+    try {
+        jdShare.setShareInfo({
+            title: '京东机票',
+            content: content,
+            url: url,
+            img: 'http://storage.jd.com/jipiaoapp/jdLogo.jpg',            
+            channel: '',
+            callback: null
+        });
+
+    } catch (error) {
+        console.log(JSON.stringify(error));
+    }
+
+}
 
 export {
   debounce,

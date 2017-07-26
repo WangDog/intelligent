@@ -171,14 +171,15 @@ module.exports = {
         historyApiFallback: true,
         proxy: {
             '/intelligent/*': {
+                // target: 'http://10.8.136.19:8080',
                 target: 'http://dgapi.jd.com',
                 changeOrigin: true,
                 // autoRewrite: true,
-                // pathRewrite: {'^/yiyao' : ''},
+                // pathRewrite: {'^/intelligent' : '/dgmobile-webapp'},
                 pathRewrite: {'^/intelligent' : ''},
                 headers: {
                     Host: 'dgapi.jd.com',
-                    //Origin: 'http://care.yiyaojd.com'
+                    Origin: 'http://10.8.136.19:8080'
                 }
                 
             }

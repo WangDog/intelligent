@@ -11,8 +11,12 @@ const apiHost = process.env.NODE_ENV == 'development' ? `/intelligent/dgmobile` 
  */
 const apiUrl = {
     recomskulist: { //用户获取根据答案推荐的商品接口
-        type: 'get',
+        type: 'post',
         url: apiHost + '/recomskulist',
+    },
+    getQuestion: {
+        type: 'post',
+        url: apiHost + '/questionandanswer'
     }
 }
 
@@ -23,16 +27,18 @@ Object.keys(apiUrl).forEach((item) => {
     /**
      * 创建api请求function，返回promise对象
      */
-    apis[item] = function apiFunc(data) {
+    apis[item] = function apiFunc(data, params) {
         let obj = apiUrl[item];
         let promise;
         let dataTmp = data;
+        let paramsTmp = params;
         promise = axios({
             method: obj.type,
             url: obj.url,
             timeout: 20000,
             data: obj.type === 'get' ? {} : dataTmp,
-            params: obj.type === 'get' ? dataTmp : {},
+            params: paramsTmp,
+            // params: obj.type === 'get' ? dataTmp : {},
             withCredentials: process.env.NODE_ENV == 'development' ? false : (process.env.test == 'true' ? false : true),
             cancelToken: new CancelToken(function executor(c) {
                 apis[item + 'Cancel'] = c;

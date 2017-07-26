@@ -126,7 +126,7 @@
 
 .answer-panel-init {
     animation-name: init;
-    animation-delay: 3s;
+    animation-delay: 2s;
     animation-duration: 2s;
     animation-fill-mode: backwards;
 }
@@ -142,32 +142,42 @@
     }
 }
 
+.button-animation {
+    animation-name: fadeInUp;
+    animation-delay: 3s;
+    animation-duration: 1s;
+    animation-fill-mode: both;
+}
 
-// .question-panel-enter-active {
-//   transition: all .5s ease;
-// }
-// .question-panel-leave-active {
-//   transition: all .5s cubic-bezier(1.0, 0.5, 0.8, 1.0);
-// }
-// .question-panel-enter {
-//   transform: translateX(20px);
-//   opacity: 0;
-// }
-// .question-panel-leave-to {
-//   transform: translateX(-20px);
-//   opacity: 0;
-// }
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translate3d(0, 100%, 0)
+    }
+    100% {
+        opacity: 1;
+        transform: none
+    }
+}
 
-/*答案面板进场出场动画效果*/
+@keyframes fadeOutDown {
+    from {
+        opacity: 1
+    }
+    100% {
+        opacity: 0;
+        transform: translate3d(0, 100%, 0)
+    }
+}
 
+//答案面板进场出场动画效果
 .question-answer-enter {
     transform: translateX(px2remN(500));
     opacity: 0;
 }
 
 .question-answer-enter-active {
-    transition: all 1s ease;
-    transition-delay: 2.5s;
+    transition: all 1.5s ease; //transition-delay: .5s;
 }
 
 .question-answer-enter-to {
@@ -188,42 +198,82 @@
     transform: translateX(px2remN(-500));
     opacity: 0;
 }
+
+//答案面板进场出场动画效果
+//按钮动画效果
+.toggle-btn-enter-active {
+    transition: all .5s ease;
+    transition-delay: 1s;
+}
+
+.toggle-btn-enter {
+    opacity: 0;
+    transform: translate3d(0, 100%, 0)
+}
+
+.toggle-btn-enter-to {
+    opacity: 1;
+    transform: none;
+}
+
+.toggle-btn-leave {
+    opacity: 1;
+}
+
+.toggle-btn-leave-active {
+    transition: all 1s ease;
+}
+
+.toggle-btn-leave-to {
+    opacity: 0;
+    transform: translate3d(0, 100%, 0)
+}
+
+//按钮动画效果
 </style>
 
 <template>
-    <transition name="question-panel" mode="out-in">
+    <!--手下留情，没写过vue，刚学过一个礼拜，堆代码中，也不管解耦不解耦了  -->
+    <!--手下留情，没写过vue，刚学过一个礼拜，堆代码中，也不管解耦不解耦了  -->
+    <!--手下留情，没写过vue，刚学过一个礼拜，堆代码中，也不管解耦不解耦了  -->
+    <transition name="question-panel" mode="out-in" v-if="questionAndAnswerList">
         <section class="index">
             <div class="question-guide question-guide-animation"></div>
-            <question-panel class="question-panel-animation" :msg="questionList[step-1]" :step="step"></question-panel>
+            <question-panel v-if="questionAndAnswerList" class="question-panel-animation" :limit="questionAndAnswerList[step-1].answerLimit" :msg="questionAndAnswerList[step-1].text" :step="step"></question-panel>
             <div class="answer-panel-init">
                 <transition name="question-answer" mode="out-in">
                     <div v-if="step == 1" key="step1">
-                        <who></who>
+                        <role :questionAndAnswerRole.sync="questionAndAnswerList[step-1]"></role>
                     </div>
                     <div v-if="step == 2" key="step2">
-                        <func></func>
+                        <func :questionAndAnswerFunc.sync="questionAndAnswerList[step-1]"></func>
                     </div>
                     <div v-if="step == 3" key="step3">
                         <price></price>
                     </div>
                 </transition>
             </div>
-            <div class="button-group clearfix">
-                <button class="next-step" @click="nextStep()" v-if="step === 1 || step === 2"  :class="{'next-page-1': step === 1, 'next-page-2': step === 2}"></button>
-                <button class="next-step" @click="search()" v-if="step === 3" :class="{'search': step === 3}"></button>
-                <div v-if="step === 2 || step === 3" class="pre-step" @click="preStep()"></div>
-                <div v-if="step === 1 || step === 2" class="skip" @click="skip()"></div>
-            </div>
+            <transition name="toggle-btn">
+                <div class="button-group clearfix" v-if="toggleBtn">
+                    <button class="next-step" @click="nextStep()" v-if="step === 1 || step === 2" :class="{'next-page-1': step === 1, 'next-page-2': step === 2 && !btnDisabled, 'next-page-2-disabled': step === 2 && btnDisabled}">
+                    </button>
+                    <button class="next-step" @click="search()" v-if="step === 3" :class="{'search': !btnDisabled, 'search-disabled': btnDisabled}"></button>
+                    <div v-if="step === 2 || step === 3" class="pre-step" @click="preStep()"></div>
+                    <div v-if="step === 1 || step === 2" class="skip" @click="skip()"></div>
+                </div>
+            </transition>
         </section>
     </transition>
 </template>
 
 <script>
-import who from './who';
+import md5 from 'blueimp-md5';
+import apis from '../../util/api';
+import { arrTips, getCookie, setTitle, bodyOverflow, clickSend, toShare, goTop, debounce } from '../../util';
+import role from './role';
 import func from './function';
 import price from './price';
 import questionPanel from './question_panel';
-import { arrTips, getCookie, setTitle, bodyOverflow, clickSend, toShare, goTop, debounce } from '../../util';
 
 export default {
     name: 'intelligent',
@@ -231,38 +281,111 @@ export default {
         return {
             step: 2,
             title: '挑手机',
-            rangeValue: 0,
-            questionList: ['您需要为谁挑选手机？', '您最看重的手机的功能是？', '你需要的手机的价格是？'],
-            questionAll: false,
-            questionPanel: (() => {
-                return document.getElementById('question-animation');
-            })()
+            questionAndAnswerList: null,
+            toggleBtn: false,
         };
+    },
+    computed: {
+        btnDisabled: function () {
+            if (this.step == 2) return false;
+            return true;
+        },
     },
     created() {
         setTitle('手机智能导购');
+        this.getQuestionAndAnswer();
+        setTimeout(() => {
+            this.toggleBtn = true;
+        }, 1000);
     },
     components: {
         questionPanel,
-        who,
+        role,
         func,
         price
     },
     methods: {
         nextStep() {
             this.step++;
+            this.toggleBtnFuc();
         },
         preStep() {
             this.step--;
+            this.toggleBtnFuc();
+        },
+        skip() {
+            this.step++;
+            this.toggleBtnFuc();
         },
         search() {
             this.$router.push({
                 name: 'list', query: {
                     fromtype: 'index',
-                    answerList: this.questionList,
+                    answerList: this.questionAndAnswerList,
                 }
             });
+        },
+        toggleBtnFuc() {
+            this.toggleBtn = false;
+            setTimeout(() => { this.toggleBtn = true }, 1500);
+        },
+        /**
+         * 获取问题答案
+         * secretkey: '12345678',
+         *    appkey: '8a48b5514b0b8727014b2a490bfd1bee',
+         */
+        getQuestionAndAnswer() {
+            const secretkey = '12345678';
+            let opts = {
+                method: 'questionandanswer',
+                appkey: '8a48b5514b0b8727014b2a490bfd1bee',
+                timestamp: Math.floor((new Date().getTime()) / 1000)
+            }
+            let params = {
+                "data": {
+                    "pin": "adcUfNKLgAriMy",
+                    "catid": "655",
+                }
+            }
+            //对时间戳、secretkey、请求body数据进行md5校验
+            params.sign = md5('' + opts.timestamp + secretkey + JSON.stringify(params.data));
+            console.log(params.sign);
+            this.getQuestion(params, opts);
+        },
+        /**
+         * 获取问题答案
+         * @param {object} opts params
+         * @param {object} body body
+         */
+        getQuestion(opts, body) {
+            let self = this;
+            apis.getQuestion(opts, body).then(data => {
+                if (!data || !data.data) {
+                    this.isLoading = false;
+                    this.errorMsg = '网络异常, 未获取到问题列表信息';
+                    this.errorType = 4;
+                    return;
+                }
+                self.questionAndAnswerList = data.data.questionAndAnswerList;
+            }).catch(error => {
+                if (apis.isCancel(error)) {
+                    console.log('请求已取消');
+                } else {
+                    this.isLoading = false;
+                    this.errorMsg = '网络异常, 未获取到航班信息';
+                    this.errorType = 4;
+                    console.warn('=========================', error);
+                }
+            });
+        },
+    },
+    watch: {
+        answerList: function () {
+            console.log(this.answerList);
         }
+    },
+    activated() {
+        toShare();
     }
 }
 </script>
