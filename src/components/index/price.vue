@@ -6,70 +6,70 @@
     background-size: px2remN(546) px2remN(840);
 }
 
-.price-1 {
+.price-0 {
     @include price;
     height: px2remN(82);
     width: px2remN(320);
     background-position: 0 0;
 }
 
-.price-1-selected {
+.price-0-selected {
     @include price;
     height: px2remN(82);
     width: px2remN(342);
     background-position: 0 px2remN(-85);
 }
 
-.price-2 {
+.price-1 {
     @include price;
     height: px2remN(84);
     width: px2remN(370);
     background-position: 0 px2remN(-168);
 }
 
-.price-2-selected {
+.price-1-selected {
     @include price;
     height: px2remN(84);
     width: px2remN(394);
     background-position: 0 px2remN(-252);
 }
 
-.price-3 {
+.price-2 {
     @include price;
     height: px2remN(82);
     width: px2remN(420);
     background-position: 0 px2remN(-336);
 }
 
-.price-3-selected {
+.price-2-selected {
     @include price;
     height: px2remN(82);
     width: px2remN(444);
     background-position: 0 px2remN(-420);
 }
 
-.price-4 {
+.price-3 {
     @include price;
     height: px2remN(84);
     width: px2remN(470);
     background-position: 0 px2remN(-504);
 }
 
-.price-4-selected {
+.price-3-selected {
     @include price;
     height: px2remN(84);
     width: px2remN(494);
     background-position: 0 px2remN(-588);
 }
 
-.price-5 {
+.price-4 {
     @include price;
     height: px2remN(84);
     width: px2remN(522);
     background-position: 0 px2remN(-672);
 }
 
-.price-5-selected {
+.price-4-selected {
     @include price;
     height: px2remN(84);
     width: px2remN(546);
@@ -101,20 +101,21 @@
 }
 
 .price-init .price {
+    $delayTime: 2s;
+    &.price-0 {
+        animation-delay: $delayTime;
+    }
     &.price-1 {
-        animation-delay: 1.25s;
+        animation-delay: $delayTime + .25s;
     }
     &.price-2 {
-        animation-delay: 1.5s;
+        animation-delay: $delayTime + .5s;
     }
     &.price-3 {
-        animation-delay: 1.75s;
+        animation-delay: $delayTime + .75s;
     }
     &.price-4 {
-        animation-delay: 2s;
-    }
-    &.price-5 {
-        animation-delay: 2.25s;
+        animation-delay: $delayTime + 1s;
     }
 }
 
@@ -154,13 +155,13 @@
 </style>
 <template>
     <ul class="price-panel" :class="{'price-init': init}">
-        <li v-for="i in 5" v-bind:key="i">
-            <transition name="toggle" class="" mode="out-in">
-                <div @click="select(i, $event)" class="price" :class="'price-' + i" key="albed" v-if="price[i-1].disabled">
-                    <span>{{price[i-1].range}}</span>
+        <li v-for="(answer, index) in  questionAndAnswerPrice.answerList" v-bind:key="index">
+            <transition name="toggle" mode="out-in">
+                <div @click="select(answer, 'select')" class="price" :class="'price-' + index" key="albed" v-if="priceSelectedList[0] != answer">
+                    <span>{{answer.text}}</span>
                 </div>
-                <div @click="select(i, $event)" class="price" :class="'price-' + i + '-selected'" key="disabled" v-else>
-                    <span>{{price[i-1].range}}</span>
+                <div @click="select(answer, 'cancel')" class="price" :class="'price-' + index + '-selected'" key="disabled" v-if="priceSelectedList[0] == answer">
+                    <span>{{answer.text}}</span>
                 </div>
             </transition>
         </li>
@@ -171,29 +172,28 @@ export default {
     name: 'price',
     data() {
         return {
-            price: [{
-                disabled: true,
-                range: '1500元以下'
-            }, {
-                disabled: true,
-                range: '1500元-2500元'
-            }, {
-                disabled: true,
-                range: '2500元-3500元'
-            }, {
-                disabled: true,
-                range: '3500元-4500元'
-            }, {
-                disabled: true,
-                range: '4500元以上'
-            }],
-            init: true
+            init: true,
+        }
+    },
+    props: {
+        questionAndAnswerPrice: {
+            type: Object,
+            required: true
+        },
+        limit: {
+            type: Number,
+            required: true
+        },
+        priceSelectedList: {
+
         }
     },
     methods: {
-        select: function (i, event) {
-            this.init = false
-            this.price[i - 1].disabled = !this.price[i - 1].disabled;
+        select: function (answer) {
+            this.init = false;
+            if(!(this.priceSelectedList.pop() == answer)){
+                this.priceSelectedList.push(answer)
+            };
         }
     }
 }

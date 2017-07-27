@@ -12,6 +12,8 @@ import './assets/css/common.scss';
 import Promise from 'promise-polyfill';
 import * as filters from './filters';
 
+var _ = require("underscore")._;
+
 if (!window.Promise) {
   window.Promise = Promise;
 }
@@ -19,7 +21,7 @@ if (!window.Promise) {
 Vue.component(Swipe.name, Swipe);
 Vue.component(SwipeItem.name, SwipeItem);
 
-Object.keys(filters).forEach(k => Vue.filter(k, filters[k])) //注册过滤器
+Object.keys(filters).forEach(k => Vue.filter(k, filters[k])); //注册过滤器
 // 注册toast loading
 Vue.$toast = Vue.prototype.$toast = Toast;
 Vue.$loading = Vue.prototype.$loading = Loading;
@@ -31,8 +33,9 @@ Vue.config.productionTip = false;
 var attachFastClick = require('fastclick');
 attachFastClick.attach(document.body);
 
-Vue.$pin = Vue.prototype.$pin = window.$pin = storage.getCookie('pt_pin') || storage.getCookie('pwdt_id') || (process.env.NODE_ENV == 'development' ? 'chenwanli' : ''); // pin
-
+Vue.$pin = Vue.prototype.$pin = window.pin = storage.getCookie('pin') ||  (process.env.NODE_ENV == 'development' ? 'adcUfNKLgAriMy' : ''); // pin
+Vue.$area =  Vue.prototype.$area = window.area = storage.getCookie('ipLoc-djd') ? storage.getCookie('ipLoc-djd').replace(/-/g, ',') : (process.env.NODE_ENV == 'development' ? '2,2825,51932,0.137923392' : ''); // area
+console.log('[ pin ] => ' + Vue.$pin, '[ area ] => ' + Vue.$area);
 // 请求判断登录接口
 // isLogin().then(() => {
 //     // 已经登录，业务逻辑

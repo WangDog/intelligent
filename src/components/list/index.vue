@@ -407,8 +407,10 @@ export default {
             }
             let params = {
                 "data": {
-                    "area": "2,2825,51932,0.137923392",
-                    "pin": "adcUfNKLgAriMy",
+                    "area": window.area,
+                    "pin": window.pin,
+                    // "area": "2,2825,51932,0.137923392",
+                    // "pin": "adcUfNKLgAriMy",
                     "tagList": [
                         {
                             "tag_id": 2

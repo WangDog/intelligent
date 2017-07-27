@@ -7,8 +7,8 @@
 }
 
 @mixin female {
-    height: px2remN(182);
-    width: px2remN(180);
+    height: px2remN(188);
+    width: px2remN(188);
     background-position: px2remN(-18) px2remN(-411);
 }
 
@@ -19,8 +19,8 @@
 }
 
 @mixin husband {
-    height: px2remN(192);
-    width: px2remN(180);
+    height: px2remN(196);
+    width: px2remN(188);
     background-position: px2remN(-17) px2remN(-208);
 }
 
@@ -55,7 +55,7 @@
 }
 
 @mixin child {
-    height: px2remN(196);
+    height: px2remN(200);
     width: px2remN(198);
     background-position: px2remN(-7) px2remN(-801);
 }
@@ -67,7 +67,7 @@
 }
 
 @mixin friend {
-    height: px2remN(188);
+    height: px2remN(192);
     width: px2remN(200);
     background-position: px2remN(-1) px2remN(-1214);
 }
@@ -79,7 +79,7 @@
 }
 
 @mixin parent {
-    height: px2remN(192);
+    height: px2remN(196);
     width: px2remN(220);
     background-position: px2remN(-232) px2remN(-1009);
 }
@@ -172,33 +172,11 @@ ul {
 
     li {
         display: inline-block;
+        transition: background .5s ease-in-out;
+        margin-bottom: 10px!important;
 
-        // &:first-child {
-        //     margin: px2remN(69) 0 0 px2remN(80);
-        //     transform: rotate(-10deg);
-        //     animation: none;
-        // }
-
-        // &:nth-child(2) {
-        //     margin: 0 0 0 px2remN(-40);
-        //     transform: rotate(10deg);
-        //     animation: none;
-        // }
-
-        // &:nth-child(3) {
-        //     margin: px2remN(59) px2remN(50) 0 px2remN(50);
-        // }
-
-        // &:nth-child(4) {
-        //     margin: px2remN(40) px2remN(275) 0 px2remN(279);
-        // }
-
-        // &:nth-child(5) {
-        //     margin: px2remN(-110) 0 0 px2remN(18);
-        // } 
         &:first-child {
             margin: px2remN(69) 0 0 px2remN(130);
-            transform: rotate(-20deg);
         }
         &:nth-child(2) {
             margin: px2remN(59) px2remN(140) 0 px2remN(95);
@@ -264,33 +242,6 @@ ul {
     animation-timing-function: linear;
 }
 
-// @keyframes flipInX {
-
-//     from {
-//         transform: perspective(400px) scale(0);
-//         opacity: 0;
-//     }
-//     85% {
-//         transform: perspective(400px) scale(1);
-//         opacity: 1;
-//     }
-//     90% {
-//         transform: perspective(400px) scale(1.05);
-//     }
-//     95% {
-//         transform: perspective(400px) scale(1.02);
-//     }
-//     95% {
-//         transform: perspective(400px) scale(1.03);
-//     }
-//     97% {
-//         transform: perspective(400px) scale(1.02);
-//     }
-//     100% {
-//         transform: perspective(400px) scale(1);
-//     }
-// }
-
 @keyframes flipInX {
     from {
         transform: perspective(400px) rotate3d(1, 0, 0, 90deg);
@@ -312,6 +263,7 @@ ul {
         transform: perspective(400px)
     }
 }
+
 .bounceInRight {
     animation-name: bounceInRight;
     animation-duration: .8s;
@@ -345,64 +297,52 @@ ul {
         transform: none
     }
 }
-
-.big {
-    transform: scale(1.1) !important;
-    opacity: 1;
-}
-
-.small-male {
-    transform: scale(.8) rotate(10deg)!important;
-    transform-origin: bottom left;
-    opacity: .8;
-    transition: transform .5s linear;
-    z-index: 2;
-}
-
-.small-female {
-    transform: scale(.8) rotate(-10deg)!important;
-    transform-origin: bottom right;
-    opacity: .8;
-    transition: transform .5s linear;
-    z-index: 2;
-}
-
-.select {
-    z-index: 100;
-    transform: scale(1.1)!important;
-    opacity: 1;
-    transition: transform .5s linear;
-}
 </style>
 
 <template>
     <ul class="flipInX">
-        <li class="female ani ani-female select female-select" :class="{'female-selected': questionAndAnswerRole.answerList[0].selected}" id="female" @click="selectRole('female-selected', 1, $event)"></li>
-        <li :class="[sex, 'ani', 'ani-' + sex]" @click="selectRole(sex + '-selected', 2, $event)"></li>
-        <li class="child ani ani-child" :class="{'child-selected': questionAndAnswerRole.answerList[0].selected}" @click="selectRole('child-selected', 3, $event)"></li>
-        <li class="parent ani ani-parent" :class="{'parent-selected': questionAndAnswerRole.answerList[0].selected}" @click="selectRole('parent-selected', 4, $event)"></li>
-        <li class="friend ani ani-friend" :class="{'friend-selected': questionAndAnswerRole.answerList[0].selected}" @click="selectRole('friend-selected', 5, $event)"></li>
+        <li class="female ani ani-female" @click="selectRole(0)"></li>
+        <li :class="[sex, 'ani', 'ani-' + sex]" @click="selectRole(2)"></li>
+        <li class="child ani ani-child" @click="selectRole(4)"></li>
+        <li class="parent ani ani-parent" @click="selectRole(1)"></li>
+        <li class="friend ani ani-friend" @click="selectRole(3)"></li>
     </ul>
 </template>
 
 
 <script>
-let maleNode = document.getElementById('male');
-let femaleNode = document.getElementById('female');
+let roleNodeList = document.getElementsByTagName('li');
+
+const SELF   = 0;
+const PARENT = 1;
+const SPOUSE = 2;
+const FRIEND = 3;
+const CHILD  = 4; 
+
+const roleMap = {
+    0: 'female',
+    1: 'parent',
+    2: 'husband',
+    3: 'friend',
+    4: 'child'
+}
+
 export default {
     name: 'who',
-    created: function () {
-        setTimeout(console.log(this.questionAndAnswerRole.answerList), 1000);
-    },
     mounted: function () {
-        this.maleNode = document.getElementById('male');
-        this.femaleNode = document.getElementById('female');
     },
     props: {
         questionAndAnswerRole: {
             required: true,
             typr: Object,
             twoWay: true,
+        },
+        limit: {
+            type: Number,
+            required: true
+        },
+        roleSelectedList: {
+
         }
     },
     data() {
@@ -411,17 +351,33 @@ export default {
         }
     },
     methods: {
-        selectRole(role, index, event) {
+        selectRole(index) {
+            let role = roleMap[index];
             let classList = event.target.classList;
+            let answer = this.questionAndAnswerRole.answerList[index];
             setTimeout(() => {
-                classList.toggle(role);
+                classList.toggle(role + '-selected');
                 classList.toggle('ani');
             }, 100);
-            this.questionAndAnswerRole.answerList[index].selected = !(this.questionAndAnswerRole.answerList[index].selected);
+
+            //去除选择
+            if (this.roleSelectedList.includes(answer)) {
+                this.roleSelectedList.splice(this.roleSelectedList.indexOf(answer), 1);
+                //未被选择并且没有超过最大限制
+            } else if (this.roleSelectedList < this.limit) {
+                this.roleSelectedList.push(answer);
+                //未被选择且已选最大数量
+            } else {
+                let delAnswerIndex = this.roleSelectedList[0].index - 1;
+                let delTagName = roleMap[delAnswerIndex] + '-selected';
+                document.getElementsByClassName(delTagName)[0].classList.remove(delTagName);
+                this.roleSelectedList.shift();
+                this.roleSelectedList.push(answer);
+            }
         },
     },
     watch: {
-        answerList: function() {
+        answerList: function () {
             console.log(this.answerList);
         }
     }
