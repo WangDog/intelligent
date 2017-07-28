@@ -398,7 +398,7 @@ export default {
             goTop();
         },
         searchList() {
-            //let params = this.$route.query;\
+            let answerList = this.$route.answerList;
             const secretkey = '12345678';
             let opts = {
                 method: 'recomskulist',

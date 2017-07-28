@@ -12,8 +12,6 @@ import './assets/css/common.scss';
 import Promise from 'promise-polyfill';
 import * as filters from './filters';
 
-var _ = require("underscore")._;
-
 if (!window.Promise) {
   window.Promise = Promise;
 }

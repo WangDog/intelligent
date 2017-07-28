@@ -4,14 +4,13 @@
 
 @mixin bubble {
     animation-fill-mode: both;
-    animation-duration: 1.5s; // animation-timing-function: ease-in-out;
+    animation-duration: 1.5s;
 }
 
 .bubble_0 {
     @include bubble;
     height: 104px;
-    width: 104px; // height: px2remN(184);
-    // width: px2remN(182);
+    width: 104px;
     animation-name: bounceInLeft;
     animation-delay: 2s;
 }
@@ -19,8 +18,7 @@
 .bubble_1 {
     @include bubble;
     height: 92px;
-    width: 92px; // height: px2remN(162);
-    // width: px2remN(162);
+    width: 92px;
     animation-name: bounceInDown;
     animation-delay: 2.25s;
 }
@@ -29,8 +27,7 @@
 .bubble_2 {
     @include bubble;
     height: 81px;
-    width: 81px; // height: px2remN(162);
-    // width: px2remN(162);
+    width: 81px;
     animation-name: bounceInDown;
     animation-delay: 1.5s;
 }
@@ -38,8 +35,7 @@
 .bubble_3 {
     @include bubble;
     height: 104px;
-    width: 104px; // height: px2remN(162);
-    // width: px2remN(162);
+    width: 104px;
     animation-name: bounceInUp;
     animation-delay: 1.75s;
 }
@@ -47,8 +43,7 @@
 .bubble_4 {
     @include bubble;
     height: 92px;
-    width: 92px; // height: px2remN(184);
-    // width: px2remN(184);
+    width: 92px;
     animation-name: bounceInRight;
     animation-delay: 1.25s;
 }
@@ -56,8 +51,7 @@
 .bubble_5 {
     @include bubble;
     height: 81px;
-    width: 81px; // height: px2remN(162);
-    // width: px2remN(162);
+    width: 81px;
     animation-name: bounceInUp;
     animation-delay: 2s;
 }
@@ -65,8 +59,7 @@
 .bubble_6 {
     @include bubble;
     height: 104px;
-    width: 104px; // height: px2remN(208);
-    // width: px2remN(208);
+    width: 104px;
     animation-name: bounceInRight;
     animation-delay: 2s;
 }
@@ -74,8 +67,7 @@
 .bubble_7 {
     @include bubble;
     height: 81px;
-    width: 81px; // height: px2remN(208);
-    // width: px2remN(208);
+    width: 81px;
     animation-name: bounceInRight;
     animation-delay: 2.25s;
 }
@@ -84,8 +76,7 @@ input[type='checkbox'] {
     display: none;
 
     &:checked+label {
-        //background-position: 0 -60px;
-        z-index: 10; //animation: none;
+        z-index: 10;
         svg {
             opacity: 1;
         }
@@ -130,6 +121,9 @@ ul {
         position: relative;
         color: #20b9f1;
 
+        .ripple {
+            opacity: 0;
+        }
         &:first-child {
             top: px2remN(30 + random(60));
             left: px2remN(30 + random(30));
@@ -179,6 +173,26 @@ ul {
     border-radius: 50%;
     transform: box-shadow 1s cubic-bezier(0.165, 0.84, 0.44, 1) 1.5s;
 
+    .ripple {
+        width: 60px;
+        height: 60px;
+        border-radius: 50%;
+        position: absolute;
+        top: calc(50% - 30px);
+        left: calc(50% - 30px);
+        animation-name: ripple;
+        animation-duration: 1s;
+        animation-timing-function: ease-in-out;
+        animation-direction: alternate-reverse;
+        animation-iteration-count: infinite;
+        transform: scale(0);
+        opacity: 0.6;
+    }
+    @keyframes ripple {
+    to {
+        transform: scale(1);
+    }
+}
     svg {
         circle {
             fill-opacity: 1;
@@ -223,7 +237,8 @@ ul {
 </style>
 <template>
     <ul class="clearfix">
-        <li v-for="(answer, index) in questionAndAnswerFunc.answerList" v-bind:key="index" @click.prevent="selectFunc(index)">
+        <li v-for="(answer, index) in questionAndAnswerFunc.answerList" v-bind:key="index" @click.prevent="selectFunc(index)" :class="{'selected': funcSelectedList.includes(answer)}">
+            <div class="ripple"></div>
             <input type="checkbox" :id="'bubble_' + index" />
             <label :for="'bubble_' + index" :class="'bubble_' + index">
                 <!--0  -->
@@ -295,7 +310,7 @@ export default {
             required: true
         },
         funcSelectedList: {
-            
+
         }
     },
     data() {

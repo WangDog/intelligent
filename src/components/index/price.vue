@@ -155,7 +155,7 @@
 </style>
 <template>
     <ul class="price-panel" :class="{'price-init': init}">
-        <li v-for="(answer, index) in  questionAndAnswerPrice.answerList" v-bind:key="index">
+        <li v-for="(answer, index) in  questionAndAnswerPrice.answerList" v-bind:key="index" :class="{'selected': priceSelectedList.includes(answer)}">
             <transition name="toggle" mode="out-in">
                 <div @click="select(answer, 'select')" class="price" :class="'price-' + index" key="albed" v-if="priceSelectedList[0] != answer">
                     <span>{{answer.text}}</span>

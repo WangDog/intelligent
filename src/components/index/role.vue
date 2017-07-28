@@ -301,11 +301,11 @@ ul {
 
 <template>
     <ul class="flipInX">
-        <li class="female ani ani-female" @click="selectRole(0)"></li>
-        <li :class="[sex, 'ani', 'ani-' + sex]" @click="selectRole(2)"></li>
-        <li class="child ani ani-child" @click="selectRole(4)"></li>
-        <li class="parent ani ani-parent" @click="selectRole(1)"></li>
-        <li class="friend ani ani-friend" @click="selectRole(3)"></li>
+        <li id="role_0" class="female ani ani-female" @click="selectRole(0)"></li>
+        <li id="role_2" :class="[sex, 'ani', 'ani-' + sex]" @click="selectRole(2)"></li>
+        <li id="role_4" class="child ani ani-child" @click="selectRole(4)"></li>
+        <li id="role_1" class="parent ani ani-parent" @click="selectRole(1)"></li>
+        <li id="role_5" class="friend ani ani-friend" @click="selectRole(3)"></li>
     </ul>
 </template>
 
@@ -313,11 +313,11 @@ ul {
 <script>
 let roleNodeList = document.getElementsByTagName('li');
 
-const SELF   = 0;
+const SELF = 0;
 const PARENT = 1;
 const SPOUSE = 2;
 const FRIEND = 3;
-const CHILD  = 4; 
+const CHILD = 4;
 
 const roleMap = {
     0: 'female',
@@ -350,6 +350,12 @@ export default {
             sex: 'husband',
         }
     },
+    mounted() {
+        if (this.roleSelectedList.length > 0) {
+            let selectIndex = this.roleSelectedList[0].index - 1;
+            document.getElementById('role_' + selectIndex).classList.add(roleMap[selectIndex] + '-selected');
+        }
+    },
     methods: {
         selectRole(index) {
             let role = roleMap[index];
@@ -375,11 +381,6 @@ export default {
                 this.roleSelectedList.push(answer);
             }
         },
-    },
-    watch: {
-        answerList: function () {
-            console.log(this.answerList);
-        }
     }
 }
 </script>

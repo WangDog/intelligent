@@ -259,16 +259,7 @@
 <script>
 import md5 from 'blueimp-md5';
 import apis from '../../util/api';
-import {
-    arrTips,
-    getCookie,
-    setTitle,
-    bodyOverflow,
-    clickSend,
-    toShare,
-    goTop,
-    debounce
-} from '../../util';
+import { arrTips, getCookie, setTitle, bodyOverflow, clickSend, toShare, goTop, debounce } from '../../util';
 import role from './role';
 import func from './function';
 import price from './price';
@@ -277,13 +268,14 @@ import questionPanel from './question_panel';
 const STEP_ONE = 1;
 const STEP_TWO = 2;
 const STEP_THREE = 3;
+const TITLE = '手机智能导购';
 
 export default {
     name: 'intelligent',
     data() {
         return {
             step: STEP_ONE,
-            title: '挑手机',
+            title: TITLE,
             questionAndAnswerList: null,
             toggleBtn: false,
             roleSelectedList: [],
@@ -308,7 +300,7 @@ export default {
         }
     },
     created() {
-        setTitle('手机智能导购');
+        setTitle(TITLE);
         this.getQuestionAndAnswer();
         setTimeout(() => {
             this.toggleBtn = true;
@@ -330,7 +322,7 @@ export default {
             this.toggleBtnFuc();
         },
         skip() {
-            switch (step) {
+            switch (this.step) {
                 case 1:
                     this.roleSelectedList = [];
                     break;
@@ -345,11 +337,12 @@ export default {
             this.toggleBtnFuc();
         },
         search() {
+            this.computeTagList();
             this.$router.push({
                 name: 'list',
                 query: {
                     fromtype: 'index',
-                    answerList: this.questionAndAnswerList,
+                    answerList: this.computeTagList(),
                 }
             });
         },
@@ -407,19 +400,21 @@ export default {
                     this.errorType = 4;
                     console.warn('=========================', error);
                 }
+                window.location.href = 'http://m.jd.com';
             });
         },
+        computeTagList() {
+            let tagList = [];
+            let answerList = [].concat(this.roleSelectedList, this.funcSelectedList, this.priceSelectedList);
+            answerList.forEach((answer) => {
+                tagList = tagList.concat(answer.tagList);
+            })
+            console.log(tagList);
+            return tagList;
+        }
     },
     watch: {
-        // roleSelectedList: function () {
-        //     console.log("roleSelectedList ==> " + JSON.stringify(this.roleSelectedList));
-        // },
-        // funcSelectedList: function () {
-        //     console.log("funcSelectedList ==> " + this.funcSelectedList);
-        // },
-        // priceSelectedList: function () {
-        //     console.log("priceSelectedList ==> " + this.priceSelectedList);
-        // }
+
     },
     activated() {
         toShare();
